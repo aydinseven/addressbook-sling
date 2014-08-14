@@ -23,7 +23,7 @@
         </div>
     </div>
     
-    <div id="bd">
+    <div id="bd"> 
     
         <h3><%= currentNode.description %></h3>
         

@@ -24,7 +24,7 @@
     </div>
     
     <div id="bd"> 
-    
+     
         <h3><%= currentNode.description %></h3>
         
      <!-- Search: TODO: What if service not there? TEST!  -->

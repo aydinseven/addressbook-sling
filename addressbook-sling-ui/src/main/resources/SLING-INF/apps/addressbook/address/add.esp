@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+    <div id="hd">
+        <div id="logo">
+            <!--<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />-->
+
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd">
+    
+        <%
+         var suffix = request.getRequestPathInfo().getSuffix()
+         var resourceResolver = resource.getResourceResolver()
+         var contactResource = resourceResolver.getResource(suffix)
+         var contactProps = contactResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap)
+        %>
+        
+       <p align="right">
+         <a id="button" href="/content/addressbook/contacts.edit.html<%= contactResource.path %>">Back</a>
+       </p>  
+        
+       <h3>Add Address for <%= contactProps.get('firstname') %> <%= contactProps.get('name') %></h3>
+    
+       <p>
+        <!-- Add Address Form: -->
+        <form action="<%= suffix %>/addresses/*" method="POST">
+         <table> 
+          <tr><td><label for="name">Street:* </label></td>
+              <td><input name="name" required="true" /></td>
+          </tr>
+          
+          <tr><td><label for="city">City:* </label></td>
+              <td><input name="city" required="true" /></td></tr>
+          
+          <tr><td><label for="country">Country:* </label></td>
+              <td>
+                <select name="country" value="country">
+                     <option>Denmark</option>
+                     <option>Germany</option>
+                     <option>Spain</option>
+                     <option>USA</option>
+                </select>
+              </td>
+          </tr>
+          <tr><td><label for="isWorkAddress">Is Work Address: </label></td>
+              <td>
+               <input type="checkbox" name="isWorkAddress" value="isWorkAddress" />
+              </td>
+          </tr>
+              
+          <tr><td></td>
+              <td><input id="blue" type="submit" value="Save">
+                  <input type="hidden" name="sling:resourceType" value="addressbook/address"/>
+                  <input type="hidden" name=":redirect" value="/content/addressbook/contacts.edit.html<%= contactResource.path %>" />
+                  <input type="hidden" name="_charset_" value="UTF-8" />
+              </td>
+          </tr>
+         </table>  
+        </form>
+       </p>
+
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

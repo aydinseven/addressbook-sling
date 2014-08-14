@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+    <div id="hd">
+        <div id="logo">
+            <!--<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />-->
+
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd">
+    
+       <p align="right">
+         <a id="button" href="/content/addressbook/contacts.html">Back</a>
+       </p>  
+    
+       <h3>Create a new Contact</h3>
+    
+       <p>
+        <!-- Add Contact Form: -->
+        <form action="/addressbookdata/contacts/*" method="POST">
+         <table> 
+          <tr><td><label for="firstname">First Name:* </label></td>
+              <td><input name="firstname" required="true" /></td>
+          </tr>
+          
+          <tr><td><label for="name">Last Name:* </label></td>
+              <td><input name="name" required="true" /></td></tr>
+          
+          <tr><td><label for="age">Age: </label></td>
+              <td><input name="age" /></td>
+          </tr>
+              
+          <tr><td></td>
+              <td><input id="blue" type="submit" value="Submit">
+                  <input type="hidden" name="sling:resourceType" value="addressbook/contact"/>
+                  <input type="hidden" name=":redirect" value="/content/addressbook/contacts.html" />
+                  <input type="hidden" name="age@DefaultValue" value="-" />
+                  <input type="hidden" name="_charset_" value="UTF-8" />
+              </td>
+          </tr>
+         </table>  
+        </form>
+       </p>
+       
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

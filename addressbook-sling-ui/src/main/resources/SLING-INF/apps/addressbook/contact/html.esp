@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+    
+   <script type="text/javascript">
+            function ask_first(link, question)
+            {
+                return window.confirm(question);
+            }
+   </script>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+ 
+    <div id="hd">
+        <div id="logo">
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd">
+    
+        <h3><%= currentNode.description %></h3>
+        
+     <!-- Search: TODO: What if service not there? TEST!  -->
+        <% 
+          var service = sling.getService(Packages.com.sling.ayseven.services.search.SearchService)
+          var resourceResolver = resource.getResourceResolver();
+          var list = service.search(resourceResolver, request.getParameter("q"))
+         %>
+         <p align="right">
+           <form method="GET" action="<%= resource.getPath() %>.html">
+                <input name="q"  type="text" placeholder="Find Contacts...">
+                <input type="submit" value="Find">
+           </form>
+         </p>
+
+        <!-- Show found contacts in a list: -->
+        <% if (list.size() > 0) { %>
+        <h3>Search Result</h3> <% } %>
+        <%
+        for (var i = 0; i < list.size(); i++) {
+          var foundResource = resourceResolver.getResource(list.get(i)); 
+          var foundResourceProps = foundResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap); %>
+          
+          <a id="button" href="/content/addressbook/contacts.detail.html<%= foundResource.path %>">
+            <%= foundResourceProps.get('firstname') %> <%= foundResourceProps.get('name') %> 
+          </a>
+          &nbsp;
+        <% } %>
+    <!-- Search End -->
+    
+        <p>
+        <!-- Contact List: -->
+        <table cellpadding="4" width="100%" border="0" align="center">
+
+            <tr>
+                <td bgcolor="lightgrey"><b>First Name</b></td>
+                <td bgcolor="lightgrey"><b>Last Name</b></td>
+                <td bgcolor="lightgrey"><b>Age</b></td>
+                <td bgcolor="lightgrey"></td>
+                <td bgcolor="lightgrey"></td>
+            </tr>
+            
+            <!-- Check if the node "addressbookdata" exists in JCR: -->
+            <% var rootNode = currentSession.getNode("/")
+            
+            if (rootNode.hasNode("addressbookdata")) { %> 
+                
+                <%
+                  var contentNode = currentSession.getNode(currentNode.contentPath)
+                  var it = contentNode.nodes;
+                  while (it.hasNext()) {
+                    var node = it.nextNode();
+                    var contactResource = resource.resourceResolver.getResource(node.path) 
+                    var contactProps = contactResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap) 
+                %>
+
+                 <tr>
+                  <td>
+                    <a id="button" href="/content/addressbook/contacts.detail.html<%= node.path %>">
+                        <%= node.getProperty("firstname") %>
+                    </a>
+                  </td>
+                  <td><%= contactProps.get('name') %></td>
+                  <td><%= node.getProperty("age") %></td>
+                  <td><a id="button" href="/content/addressbook/contacts.edit.html<%= node.path %>">Edit</a></td>
+                  <td><a id="button" href="/content/addressbook/contacts.remove.html<%= node.path %>"
+                        onclick="return ask_first(this, 'Really delete this contact?');">Remove</a></td>
+                </tr>
+                <% } %> 
+                
+            <% } %> 
+                
+        </table>
+        </p>
+        
+        <p>
+          <a id="button" href="/content/addressbook/contacts.add.html">Add new Contact</a>
+        </p>
+
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+    <div id="hd">
+        <div id="logo">
+            <!--<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />-->
+
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd">
+    
+        <%
+         var suffix = request.getRequestPathInfo().getSuffix()
+         var resourceResolver = resource.getResourceResolver()
+         var contactResource = resourceResolver.getResource(suffix)
+         var contactProps = contactResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap)
+        %>
+    
+        <p align="right">
+          <a id="button" href="/content/addressbook/contacts.edit.html<%= contactResource.path %>">Edit</a>
+          <a id="button" href="/content/addressbook/contacts.html">Back</a>
+        </p>
+    
+        <h3>Contact Details of <%= contactProps.get('firstname') %> <%= contactProps.get('name') %></h3>
+        <br>
+        
+        <table cellpadding="2" width="30%" border="0" >
+         <tr>
+           <td>First Name:</td><td><%= contactProps.get('firstname') %></td>
+         </tr>
+         <tr>  
+           <td>Last Name:</td><td><%= contactProps.get('name') %></td>
+         </tr>
+         <tr>  
+           <td>Age:</td><td><%= contactProps.get('age') %></td>
+         </tr>
+        </table>
+        
+        <br><br>
+        
+        <h3>Addresses of <%= contactProps.get('firstname') %> <%= contactProps.get('name') %></h3>
+        
+        <!-- Address List: -->
+         <table cellpadding="4" width="100%" border="0" align="center">
+
+            <tr>
+                <td bgcolor="lightgrey"><b>Street</b></td>
+                <td bgcolor="lightgrey"><b>City</b></td>
+                <td bgcolor="lightgrey"><b>Country</b></td>
+                <td bgcolor="lightgrey"><b>Work Address</b></td>
+            </tr>
+
+            <%
+                <!-- Check if the current contact has addresses: -->
+                var contentNode = currentSession.getNode(suffix)
+                if (contentNode.hasNode("addresses")) { 
+            
+                    var addressContentNodePath = String(contactResource.path+"/addresses")
+                    var addressContentNode = currentSession.getNode(addressContentNodePath)
+                    <!-- var addressContentNode = contactResource.getChild("addresses").adaptTo(Packages.javax.jcr.Node) -->
+                    var addressIt = addressContentNode.nodes;
+                    while(addressIt.hasNext()) {
+                        var addressNode = addressIt.nextNode();
+                        var addressResource = resource.resourceResolver.getResource(addressNode.path) 
+                        var addressProps = addressResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap) 
+            %>
+        
+                    <tr>
+                      <td><%= addressProps.get('name') %></td>
+                      <td><%= addressProps.get('city') %></td>
+                      <td><%= addressProps.get('country') %></td>
+                      <td>
+                        <% if (addressProps.get('isWorkAddress') != null) { %> 
+                                <input type="checkbox" name="isWorkAddress" id="isWorkAddress" 
+                                        value="<%= addressProps.get('isWorkAddress') %>" onclick="return false" checked /> 
+                                <% } else { %>
+                                <input type="checkbox" name="isWorkAddress" id="isWorkAddress" 
+                                        value="<%= addressProps.get('isWorkAddress') %>" onclick="return false" /> <% } %>
+                      </td>
+                    </tr>
+                    
+                    <% } } %>
+
+        </table> 
+        
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

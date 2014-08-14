@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+    
+    <script type="text/javascript">
+            function ask_first(link, question)
+            {
+                return window.confirm(question);
+            }
+   </script>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+    <div id="hd">
+        <div id="logo">
+            <!--<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />-->
+
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd">
+    
+        <%
+         var suffix = request.getRequestPathInfo().getSuffix()
+         var resourceResolver = resource.getResourceResolver()
+         var contactResource = resourceResolver.getResource(suffix)
+         var contactProps = contactResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap)
+        %>
+    
+       <p align="right">
+         <a id="button" href="/content/addressbook/contacts.html">Back</a>
+       </p>
+    
+       <h3>Edit Contact Details of <%= contactProps.get('firstname') %> <%= contactProps.get('name') %></h3>
+       
+       <p>
+        <!-- Edit Contact Form: -->
+        <form action="<%= contactResource.path %>" method="POST">
+         <table> 
+          <tr><td><label for="firstname">First Name:* </label></td>
+              <td><input required="true" name="firstname" id="firstname" type="text" placeholder="First Name"
+                value="<%= contactProps.get('firstname') %>"/></td>
+          </tr>
+          
+          <tr><td><label for="name">Last Name:* </label></td>
+              <td><input required="true" name="name" id="name" type="text" placeholder="Last Name"
+                value="<%= contactProps.get('name') %>"/></td>
+          </tr>
+          
+          <tr><td><label for="age">Age: </label></td>
+              <td><input name="age" id="age" type="text" placeholder="Age"
+                value="<%= contactProps.get('age') %>"/></td>
+          </tr>
+              
+          <tr><td></td>
+              <td><input id="blue" type="submit" value="Save">
+                  <input type="hidden" name="sling:resourceType" value="addressbook/contact"/>
+                  <input type="hidden" name=":redirect" value="/content/addressbook/contacts.html" />
+                  <input type="hidden" name="age@DefaultValue" value="-" />
+                  <input type="hidden" name="_charset_" value="UTF-8" />
+              </td>
+          </tr>
+         </table>  
+        </form>
+       </p>
+       
+       <br>
+
+       <p>
+         <h3>Addresses of <%= contactProps.get('firstname') %> <%= contactProps.get('name') %></h3><br>
+         
+         <!-- Address List: -->
+         <table cellpadding="4" width="100%" border="0" align="center">
+
+            <tr>
+                <td bgcolor="lightgrey"><b>Street</b></td>
+                <td bgcolor="lightgrey"><b>City</b></td>
+                <td bgcolor="lightgrey"><b>Country</b></td>
+                <td bgcolor="lightgrey"><b>Work Address</b></td>
+                <td bgcolor="lightgrey"></td>
+                <td bgcolor="lightgrey"></td>
+            </tr>
+
+            <%
+                <!-- Check if the current contact has addresses: -->
+                var contentNode = currentSession.getNode(suffix)
+                if (contentNode.hasNode("addresses")) { 
+            
+                    var addressContentNodePath = String(contactResource.path+"/addresses")
+                    var addressContentNode = currentSession.getNode(addressContentNodePath)
+                    <!-- var addressContentNode = contactResource.getChild("addresses").adaptTo(Packages.javax.jcr.Node) -->
+                    var addressIt = addressContentNode.nodes;
+                    while(addressIt.hasNext()) {
+                        var addressNode = addressIt.nextNode();
+                        var addressResource = resource.resourceResolver.getResource(addressNode.path) 
+                        var addressProps = addressResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap) 
+            %>
+                   <form action="<%= addressResource.path %>" method="POST">
+                    <tr>
+                      <td><input required="true" name="name" id="name" type="text" placeholder="Street"
+                            value="<%= addressProps.get('name') %>"/></td>
+                      <td><input required="true" name="city" id="city" type="text" placeholder="City"
+                            value="<%= addressProps.get('city') %>"/></td>
+                      <td>
+                        <select name="country" id="country">
+                            <% if (addressProps.get('country') == "Denmark") { %> 
+                             <option selected>Denmark</option>
+                             <option>Germany</option>
+                             <option>Spain</option>
+                             <option>USA</option>
+                            <% } %>
+                            <% if (addressProps.get('country') == "Germany") { %>
+                             <option>Denmark</option>
+                             <option selected>Germany</option>
+                             <option>Spain</option>
+                             <option>USA</option>
+                            <% } %>
+                            <% if (addressProps.get('country') == "Spain") { %> 
+                             <option>Denmark</option>
+                             <option>Germany</option>
+                             <option selected>Spain</option>
+                             <option>USA</option>
+                            <% } %>
+                            <% if (addressProps.get('country') == "USA") { %> 
+                             <option>Denmark</option>
+                             <option>Germany</option>
+                             <option>Spain</option>
+                             <option selected>USA</option>
+                            <% } %> 
+                        </select>
+                      </td>
+                      <td>
+                        <% if (addressProps.get('isWorkAddress') != null) { %> 
+                                <input type="checkbox" name="isWorkAddress" id="isWorkAddress" 
+                                        value="<%= addressProps.get('isWorkAddress') %>" checked />
+                                <% } else { %>
+                                <input type="checkbox" name="isWorkAddress" id="isWorkAddress" 
+                                        value="<%= addressProps.get('isWorkAddress') %>"  /> <% } %> 
+                      </td>
+                      <td><input id="blue" type="submit" value="Save">
+                          <input type="hidden" name="isWorkAddress@Delete" value="delete isWorkAddress"/>
+                          <input type="hidden" name="sling:resourceType" value="addressbook/address"/>
+                          <input type="hidden" name=":redirect" value="/content/addressbook/contacts.edit.html<%= contactResource.path %>" />
+                          <input type="hidden" name="_charset_" value="UTF-8" />
+                      </td>
+                      <td>
+                          <a id="button" href="/content/addressbook/addresses.remove.html<%= addressNode.path %>" 
+                                onclick="return ask_first(this, 'Really delete this address?');">Remove</a> 
+                      </td>
+                    </tr>
+                   </form>
+                    <% } } %>
+                   
+        </table>
+         <br>
+         <a id="button" href="/content/addressbook/addresses.add.html<%= suffix %>">Add Address</a>
+         
+       </p>
+
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

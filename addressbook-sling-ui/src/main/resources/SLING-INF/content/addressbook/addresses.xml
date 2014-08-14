@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<node>
+ 
+    <primaryNodeType>nt:unstructured</primaryNodeType>
+    
+    <property>
+        <name>title</name>
+        <type>String</type>
+        <value>Address Book</value>
+    </property>
+    
+    <property>
+        <name>description</name>
+        <type>String</type>
+        <value>... with Apache Sling</value>
+    </property>    
+    
+    <property>
+        <name>contentPath</name>
+        <type>String</type>
+        <value>/addressbookdata/contacts/addresses</value>
+    </property>
+
+    <property>
+        <name>sling:resourceType</name>
+        <type>String</type>
+        <value>addressbook/address</value>
+    </property>
+
+</node>

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+    <div id="hd">
+        <div id="logo">
+            <!--<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />-->
+
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd">
+        
+        <p>
+         <% 
+           var suffix = request.getRequestPathInfo().getSuffix()
+           var resourceResolver = resource.getResourceResolver()
+           var contactResource = resourceResolver.getResource(suffix)
+           var contactProps = contactResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap)
+           
+           var firstname = contactProps.get('firstname')
+           var lastname = contactProps.get('name')
+         
+           currentSession.getItem(suffix).remove()
+           currentSession.save()
+         %>
+         The Contact "<%= firstname %> <%= lastname %>" was deleted successfully!
+        </p>
+        
+        <p>
+          <a id="button" href="/content/addressbook/contacts.html">Back to Contact List</a>
+        </p>
+
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

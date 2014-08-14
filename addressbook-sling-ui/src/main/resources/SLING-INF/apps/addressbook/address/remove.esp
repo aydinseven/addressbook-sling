@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+<html>
+ <head>
+    <title><%= currentNode.title %></title>
+        
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+            rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/etc/css/style.css" type="text/css" media="screen"
+            title="Stylesheet" />
+ </head>
+ <body>
+    <div id="hd">
+        <div id="logo">
+            <!--<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />-->
+
+            <h1><a id="logo" href="/content/addressbook/contacts.html"><%= currentNode.title %></a></h1>
+        </div>
+    </div>
+    
+    <div id="bd"> 
+        
+        <p>
+         <% 
+           var suffix = request.getRequestPathInfo().getSuffix()
+           var resourceResolver = resource.getResourceResolver()
+           var addressResource = resourceResolver.getResource(suffix)
+           var addressProps = addressResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap)
+           
+           var streetName = addressProps.get('name')
+           
+           <!-- TODO: -->
+           var contactResource = resourceResolver.getResource(addressResource.path)
+           
+           
+           <!-- Delete the selected address: -->
+           currentSession.getItem(suffix).remove()
+           currentSession.save() 
+         
+         %>
+                      
+          suffix: <%= suffix %><br> 
+          contactResource: <%= contactResource %><br>
+          addressResource: <%= addressResource %><br><br>
+         
+          The Address in "<%= streetName %>" was deleted successfully!
+        </p>
+        
+        <p>
+          <!-- 
+            suffix:   /addressbookdata/contacts/hetfield/addresses/fred
+            Goal: /content/addressbook/contacts.edit.html/addressbookdata/contacts/hetfield 
+          -->
+          <a id="button" href="/content/addressbook/contacts.html">Back to Contact TODO</a>
+        </p>
+
+    </div>
+    <div id="ft">
+        <br>
+        <br>
+        <center>
+            <span> </span>
+        </center>
+    </div>
+</body>
+</html>

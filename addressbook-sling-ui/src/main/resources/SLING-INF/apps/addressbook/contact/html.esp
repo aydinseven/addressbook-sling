@@ -27,7 +27,7 @@
      
         <h3><%= currentNode.description %></h3>
         
-     <!-- Search: TODO: What if service not there? TEST!  -->sdsdfsfsf
+     <!-- Search: TODO: What if service not there? TEST!  -->
         <% 
           var service = sling.getService(Packages.com.sling.ayseven.services.search.SearchService)
           var resourceResolver = resource.getResourceResolver();

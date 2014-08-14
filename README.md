@@ -11,7 +11,7 @@ Before running the Sling Address Book, the following requirements must be met:
 
 To run the Sling Address Book, follow these steps:
 
-    1. git clone git@github.com:floriansalihovic/pet-clinic.git will checkout the project.
-    2. cd pet-clinic
+    1. git clone git@github.com:aydinseven/addressbook-sling.git to checkout the project
+    2. cd addressbook-sling
     3. mvn clean install -PautoInstallBundle
-    4. Open the browser at http://localhost:8080/content/petclinic/en/owners.html
+    4. Open the browser at http://localhost:8080/content/addressbook/contacts.html

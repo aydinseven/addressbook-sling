@@ -27,32 +27,40 @@
      
         <h3><%= currentNode.description %></h3>
         
-     <!-- Search: TODO: What if service not there? TEST!  -->   
-     
-        <% 
-          var service = sling.getService(Packages.com.sling.ayseven.services.search.SearchService)
-          var resourceResolver = resource.getResourceResolver();
-          var list = service.search(resourceResolver, request.getParameter("q"))
-         %>
+     <!-- Search: -->   
          <p align="right">
            <form method="GET" action="<%= resource.getPath() %>.html">
                 <input name="q"  type="text" placeholder="Find Contacts...">
                 <input type="submit" value="Find">
            </form>
          </p>
+         
+        <!-- TODO: What if service not there? TEST!  -->
+        <% 
+         try {
+          var service = sling.getService(Packages.com.sling.ayseven.services.search.SearchService) 
+          var resourceResolver = resource.getResourceResolver();
+          var list = service.search(resourceResolver, request.getParameter("q"))
+         } 
+         catch (e) { %> 
+          <h4>Search Service Bundle not installed!</h4> <% }
+        %>
 
         <!-- Show found contacts in a list: -->
-        <% if (list.size() > 0) { %>
-        <h3>Search Result</h3> <% } %>
         <%
-        for (var i = 0; i < list.size(); i++) {
-          var foundResource = resourceResolver.getResource(list.get(i)); 
-          var foundResourceProps = foundResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap); %>
+          var listsize = 0;
+          if (list != undefined) { listsize = list.size(); }
+          if (listsize > 0) { %>
+          <h3>Search Result</h3> <% } %>
+          <%
+          for (var i = 0; i < listsize; i++) {
+            var foundResource = resourceResolver.getResource(list.get(i)); 
+            var foundResourceProps = foundResource.adaptTo(Packages.org.apache.sling.api.resource.ValueMap); %>
           
-          <a id="button" href="/content/addressbook/contacts.detail.html<%= foundResource.path %>">
-            <%= foundResourceProps.get('firstname') %> <%= foundResourceProps.get('name') %> 
-          </a>
-          &nbsp;
+            <a id="button" href="/content/addressbook/contacts.detail.html<%= foundResource.path %>">
+              <%= foundResourceProps.get('firstname') %> <%= foundResourceProps.get('name') %> 
+            </a>
+            &nbsp;
         <% } %>
     <!-- Search End -->
     

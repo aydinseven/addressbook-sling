@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <name>addressbook-sling</name>
-  <url>http://maven.apache.org</url>
+  <url>https://github.com/aydinseven/addressbook-sling</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,4 +29,5 @@
   	<module>addressbook-sling-services</module>
   	<module>addressbook-sling-ui</module>
   </modules>
+  <description>A small address book web application with Apache Sling.</description>
 </project>

@@ -6,7 +6,8 @@
     <packaging>bundle</packaging>
     
     <name>addressbook-sling-ui</name>
-    <description>A small address book web application with Apache Sling</description>
+    <url>https://github.com/aydinseven/addressbook-sling</url>
+    <description>A small address book web application with Apache Sling. This modul contains the User Interface of the web application.</description>
     <build>
         <plugins>
             <plugin>
@@ -116,4 +117,5 @@
     	<artifactId>addressbook-sling</artifactId>
     	<version>0.0.1-SNAPSHOT</version>
     </parent>
+    
 </project>

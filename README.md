@@ -1,4 +1,4 @@
-Address Book Web Application with Apache Sling
+    Address Book Web Application with Apache Sling
 
 This is a small web application build using with Apache Sling, JCR and ESP (ECMAScript).
 

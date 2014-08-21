@@ -29,5 +29,5 @@
   	<module>addressbook-sling-services</module>
   	<module>addressbook-sling-ui</module>
   </modules>
-  <description>A small address book web application with Apache Sling.</description>
+  <description>A small address book web application developed with Apache Sling.</description>
 </project>
